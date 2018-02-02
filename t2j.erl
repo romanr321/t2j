@@ -93,7 +93,7 @@ json_array([H|T]) ->
 
 	case T of
 		[] -> S;
-		_ -> S ++ json_array(T)
+		_ -> S ++ "," ++ json_array(T)
 	end.
 
 
