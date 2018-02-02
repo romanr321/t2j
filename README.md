@@ -1,14 +1,20 @@
 # t2j
 This simple Erlang module converts Erlang terms to json. 
+
 Just drop the t2j.erl file in your src folder and you're good to go.
 
 supports: atoms, booleans, null, strings, integers, floats, binary and arrays.
 
 atom, string -> "string"
+
 boolean, null -> true|false|null
+
 int, float -> number
+
 binary -> "string"
+
 list -> array
+
 tuple -> object
 
 
