@@ -43,7 +43,13 @@ t2j2(T) ->
 				end;
 		false -> 
 			case is_atom(E) of
-				true -> J1 = "\"" ++ atom_to_list(E) ++"\":";
+				true -> case E of 
+							true -> J1 = "true:";
+							false -> J1 = "false:";
+							null -> J1 = "null:";
+							_ -> 	J1 = "\"" ++ atom_to_list(E) ++"\":"
+						end;
+
 				_ -> case char_list(E) of
 										true -> J1 = "\"" ++ E ++"\":";
 										false -> case is_binary(E) of
@@ -68,7 +74,12 @@ t2j2(T) ->
 		 						end;
 		 				false ->
 		 					case is_atom(E2) of
-								true -> J2 = "\"" ++ atom_to_list(E2) ++"\"";
+								true -> case E2 of 
+											true -> J1 = "true:";
+											false -> J1 = "false:";
+											null -> J1 = "null:";
+											_ -> 	J1 = "\"" ++ atom_to_list(E2) ++"\":"
+										end;
 								_ -> case char_list(E2) of
 										true -> J2 = "\"" ++ E2 ++"\"";
 										false -> case is_binary(E2) of
@@ -88,7 +99,7 @@ t2j2(T) ->
 	
 json_array([E|T]) ->
 case is_tuple(E) of
-		true -> J1 = t2j(E),
+		true -> J1 = t2j2(E),
 				case length(T) of
 					0 -> J1;
 					_ -> J1 ++ "," ++ json_array(T)
@@ -101,7 +112,12 @@ case is_tuple(E) of
 		 						end;
 		 				false ->
 		 					case is_atom(E) of
-								true -> J1 = "\"" ++ atom_to_list(E) ++"\"";
+								true -> case E of 
+										true -> J1 = "true:";
+										false -> J1 = "false:";
+										null -> J1 = "null:";
+										_ -> 	J1 = "\"" ++ atom_to_list(E) ++"\":"
+										end;
 								_ -> case char_list(E) of
 										true -> J1 = "\"" ++ E ++"\"";
 										false -> case is_binary(E) of
