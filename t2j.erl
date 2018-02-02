@@ -40,7 +40,7 @@ t2j(T) ->
 		 	end,
 		 	E2 = element(2,T),
 		 	case is_tuple(E2) of
-		 		true -> J2 = t2j(E2),
+		 		true -> J2 = "{"++t2j(E2)++"}}",
 		 				T2 = list_to_tuple(tl(tl(tuple_to_list(T)))),
 						case size(T2) of
 							0 -> J1 ++ J2;
