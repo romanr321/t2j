@@ -14,9 +14,11 @@
 
 % @doc t2jp/1 is pretty t2j, uses io:format to improve readability of t2j result.
 % Sample tuple: T = {"K",{{key, value},{key2,{{key3, value3}, {key4, value4}, {key5, 5.333}}}}}
-% Sample tuple: T2 = {"K",{{key, value},{key2,["a","b","c",4]}}}
+% Sample tuple: T3 = {"K",{{key, value},{key2,[{<<"abc">>,"b"},{"c",4}]}}}
 
 % @end
+
+%t2j:t2jp(T3).
 
 -spec t2jp(tuple()) -> string().
 
@@ -42,7 +44,13 @@ t2j2(T) ->
 		false -> 
 			case is_atom(E) of
 				true -> J1 = "\"" ++ atom_to_list(E) ++"\":";
-				_ -> J1 =  "\"" ++ E ++"\":"
+				_ -> case char_list(E) of
+										true -> J1 = "\"" ++ E ++"\":";
+										false -> case is_binary(E) of
+													true -> J1 = "\"" ++ binary_to_list(E) ++"\":";
+													false -> J1 = "[" ++ json_array(E) ++ "]:"
+												end
+									 end
 		 	end,
 		 	E2 = element(2,T),
 		 	case is_tuple(E2) of
@@ -63,7 +71,10 @@ t2j2(T) ->
 								true -> J2 = "\"" ++ atom_to_list(E2) ++"\"";
 								_ -> case char_list(E2) of
 										true -> J2 = "\"" ++ E2 ++"\"";
-										false -> J2 = "[" ++ json_array(E2) ++ "]"
+										false -> case is_binary(E2) of
+													true -> J2 = "\"" ++ binary_to_list(E2) ++"\"";
+													false -> J2 = "[" ++ json_array(E2) ++ "]"
+												end
 									 end
 							end
 					end,
@@ -75,25 +86,31 @@ t2j2(T) ->
 		 	end
 	end.
 	
-json_array([H|T]) ->
-	case is_number(H) of
-		 true -> case is_integer(H) of
-		 			true -> S = integer_to_list(H);
-		 			false -> S = float_to_list(H,[{decimals, 10}, compact])
-		 		end;
-		 false ->
-		 case is_atom(H) of
-				true -> S = "\"" ++ atom_to_list(H) ++"\"";
-				_ -> case char_list(H) of
-						true -> S = "\"" ++ H ++"\"";
-						false -> S = "[" ++ json_array(H) ++ "]"
+json_array([E|T]) ->
+case is_tuple(E) of
+		true -> J1 = t2j(E),
+				case length(T) of
+					0 -> J1;
+					_ -> J1 ++ "," ++ json_array(T)
+				end;
+		false -> 
+		 			case is_number(E) of
+		 				true -> case is_integer(E) of
+		 							true -> J1 = integer_to_list(E) ;
+		 							false -> J1 = float_to_list(E,[{decimals, 10}, compact])
+		 						end;
+		 				false ->
+		 					case is_atom(E) of
+								true -> J1 = "\"" ++ atom_to_list(E) ++"\"";
+								_ -> case char_list(E) of
+										true -> J1 = "\"" ++ E ++"\"";
+										false -> case is_binary(E) of
+													true -> J2 = "\"" ++ binary_to_list(E) ++"\"";
+													false -> J1 = "[" ++ json_array(E) ++ "]"
+												end
+									 end
+							end
 					end
-		end
-	end,
-
-	case T of
-		[] -> S;
-		_ -> S ++ "," ++ json_array(T)
 	end.
 
 
