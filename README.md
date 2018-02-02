@@ -23,7 +23,7 @@ and with arrays
 
 >>t2j:t2jp(T2).
 
-{"K":{"key":"value","key2":["a""b""c"4]}}
+{"K":{"key":"value","key2":["a","b","c",4]}}
 
 
 todo: boolean, null
