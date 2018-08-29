@@ -75,10 +75,10 @@ t2j2(T) ->
 		 				false ->
 		 					case is_atom(E2) of
 								true -> case E2 of 
-											true -> J1 = "true:";
-											false -> J1 = "false:";
-											null -> J1 = "null:";
-											_ -> 	J1 = "\"" ++ atom_to_list(E2) ++"\":"
+											true -> J2 = "true:";
+											false -> J2 = "false:";
+											null -> J2 = "null:";
+											_ -> 	J2 = "\"" ++ atom_to_list(E2) ++"\":"
 										end;
 								_ -> case char_list(E2) of
 										true -> J2 = "\"" ++ E2 ++"\"";
