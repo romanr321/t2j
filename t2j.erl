@@ -107,22 +107,22 @@ case is_tuple(E) of
 		false -> 
 		 			case is_number(E) of
 		 				true -> case is_integer(E) of
-		 							true -> J1 = integer_to_list(E) ;
-		 							false -> J1 = float_to_list(E,[{decimals, 10}, compact])
+		 							true -> _J1 = integer_to_list(E) ;
+		 							false -> _J1 = float_to_list(E,[{decimals, 10}, compact])
 		 						end;
 		 				false ->
 		 					case is_atom(E) of
 								true -> case E of 
-										true -> J1 = "true:";
-										false -> J1 = "false:";
-										null -> J1 = "null:";
-										_ -> 	J1 = "\"" ++ atom_to_list(E) ++"\":"
+										true -> _J1 = "true:";
+										false -> _J1 = "false:";
+										null -> _J1 = "null:";
+										_ -> 	_J1 = "\"" ++ atom_to_list(E) ++"\":"
 										end;
 								_ -> case char_list(E) of
-										true -> J1 = "\"" ++ E ++"\"";
+										true -> _J1 = "\"" ++ E ++"\"";
 										false -> case is_binary(E) of
-													true -> J2 = "\"" ++ binary_to_list(E) ++"\"";
-													false -> J1 = "[" ++ json_array(E) ++ "]"
+													true -> _J1 = "\"" ++ binary_to_list(E) ++"\"";
+													false -> _J1 = "[" ++ json_array(E) ++ "]"
 												end
 									 end
 							end
